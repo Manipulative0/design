@@ -3,19 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Design Guide</title>
+  <title>3DS Hacks Guide</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
       margin: 0;
       font-family: "Segoe UI", sans-serif;
-      display: flex;
-      min-height: 100vh;
       background: #fdfdfd;
       color: #333;
       transition: background 0.3s, color 0.3s;
     }
 
+    /* Night mode */
     body.dark {
       background: #1a1a1a;
       color: #eee;
@@ -33,7 +32,6 @@
       z-index: 1000;
       transition: background 0.3s, border 0.3s;
     }
-
     body.dark header {
       background: #2a2a2a;
       border-color: #444;
@@ -58,92 +56,36 @@
       border: none;
       cursor: pointer;
     }
-
     .header-actions a:hover, .toggle-btn:hover {
       color: #007bff;
     }
 
-    .container {
-      display: flex;
-      width: 100%;
-      flex: 1;
-    }
-
-    /* サイドバー */
-    .sidebar {
-      width: 150px;
-      background: #ccc;
-      padding: 20px;
-      overflow-y: auto;
-      flex-shrink: 0;
-    }
-
-    .sidebar a {
-      display: block;
-      text-decoration: none;
-      color: #333;
-      padding: 12px 15px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      font-weight: 600;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    body.dark .sidebar {
-      background: #333;
-    }
-
-    body.dark .sidebar a {
-      color: #eee;
-    }
-
-    .sidebar a:hover {
-      background: #007bff;
-      color: #fff;
-    }
-
-    .main {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
+    main {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 20px;
+      line-height: 1.7;
     }
 
     h1, h2 {
       margin-top: 20px;
     }
 
-    /* スマホ対応 */
-    @media screen and (max-width: 600px) {
-      .container {
-        flex-direction: column;
-      }
-
-      .sidebar {
-        width: 100%;
-        display: flex;
-        overflow-x: auto;
-        padding: 10px;
-      }
-
-      .sidebar a {
-        margin: 0 10px 0 0;
-        padding: 10px;
-        white-space: nowrap;
-      }
-
-      .main {
-        padding: 15px 10px;
-      }
-
-      header {
-        padding: 10px 15px;
-      }
+    /* 内部リンクのスタイル */
+    nav a {
+      display: block;
+      margin: 5px 0;
+      text-decoration: none;
+      color: #007bff;
+    }
+    nav a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="site-title">Design Guide</div>
+    <div class="site-title">3DS Hacks Guide</div>
     <div class="header-actions">
       <a href="https://github.com/Manipulative0" target="_blank"><i class="fab fa-github"></i></a>
       <a href="https://x.com/manipulative00" target="_blank"><i class="fab fa-x-twitter"></i></a>
@@ -151,86 +93,86 @@
     </div>
   </header>
 
-  <div class="container">
-    <div class="sidebar">
+  <main>
+    <nav>
       <a href="#invert">色の反転</a>
       <a href="#colorpicker">Color Picker</a>
       <a href="#compatibility">色との相性</a>
       <a href="#codes">色コードまとめ</a>
-    </div>
+    </nav>
 
-    <div class="main">
-      <section id="invert">
-        <h1>色の反転について</h1>
-        <p>
-          色の反転とは、現在表示されている色を反対の色に変える処理のことです。
-          デザインやWebサイト制作でよく使われ、特にダークモードや視認性向上に役立ちます。
-          例えば、白背景に黒文字の状態を反転すると、黒背景に白文字になります。
-        </p>
-        <h2>基本的な仕組み</h2>
-        <p>
-          色はRGB（赤・緑・青）の組み合わせで表されます。色の反転は、各RGB値を
-          <code>255 - 現在の値</code>で計算することで実現できます。
-        </p>
-        <h2>用途と効果</h2>
-        <ul>
-          <li>ダークモード切替による目の疲れ軽減</li>
-          <li>ユーザーの注目を引くためのアクセント表示</li>
-          <li>視覚的なコントラストを強めて可読性を向上</li>
-          <li>画像やグラフィックデザインの特殊効果として活用</li>
-        </ul>
-      </section>
+    <section id="invert">
+      <h1>色の反転について</h1>
+      <p>
+        色の反転とは、現在表示されている色を反対の色に変える処理のことです。
+        デザインやWebサイト制作でよく使われ、特にダークモードや視認性向上に役立ちます。
+        例えば、白背景に黒文字の状態を反転すると、黒背景に白文字になります。
+      </p>
+      <h2>基本的な仕組み</h2>
+      <p>
+        色はRGB（赤・緑・青）の組み合わせで表されます。色の反転は、各RGB値を
+        <code>255 - 現在の値</code>で計算することで実現できます。
+        例えば、黒（rgb(0,0,0)）は白（rgb(255,255,255)）に、青（rgb(0,0,255)）は黄（rgb(255,255,0)）に変わります。
+      </p>
+      <h2>用途と効果</h2>
+      <ul>
+        <li>ダークモード切替による目の疲れ軽減</li>
+        <li>ユーザーの注目を引くためのアクセント表示</li>
+        <li>視覚的なコントラストを強めて可読性を向上</li>
+        <li>画像やグラフィックデザインの特殊効果として活用</li>
+      </ul>
+    </section>
 
-      <section id="colorpicker">
-        <h1>Color Pickerについて</h1>
-        <p>
-          Color Pickerは、色を選択・確認するためのツールです。Web制作やデザインにおいて、
-          正しい色を簡単に選ぶために不可欠です。
-        </p>
-        <h2>使い方</h2>
-        <p>多くのColor Pickerは、RGB・HEX・HSLなど複数形式で色を確認できます。</p>
-        <h2>効果</h2>
-        <ul>
-          <li>デザイン作業の効率化</li>
-          <li>配色ミスの防止</li>
-          <li>複数デバイス間での色の一貫性維持</li>
-        </ul>
-      </section>
+    <section id="colorpicker">
+      <h1>Color Pickerについて</h1>
+      <p>
+        Color Pickerは、色を選択・確認するためのツールです。Web制作やデザインにおいて、
+        正しい色を簡単に選ぶために不可欠です。
+      </p>
+      <h2>使い方</h2>
+      <p>多くのColor Pickerは、RGB・HEX・HSLなど複数形式で色を確認できます。</p>
+      <h2>効果</h2>
+      <ul>
+        <li>デザイン作業の効率化</li>
+        <li>配色ミスの防止</li>
+        <li>複数デバイス間での色の一貫性維持</li>
+      </ul>
+    </section>
 
-      <section id="compatibility">
-        <h1>色との相性</h1>
-        <p>
-          色の組み合わせによって、印象や可読性が大きく変わります。
-          相性の良い色を使うことで、デザイン全体の調和が生まれます。
-        </p>
-        <h2>ポイント</h2>
-        <ul>
-          <li>コントラストを意識する</li>
-          <li>暖色・寒色のバランスを取る</li>
-          <li>ブランドカラーを優先する</li>
-        </ul>
-      </section>
+    <section id="compatibility">
+      <h1>色との相性</h1>
+      <p>
+        色の組み合わせによって、印象や可読性が大きく変わります。
+        相性の良い色を使うことで、デザイン全体の調和が生まれます。
+      </p>
+      <h2>ポイント</h2>
+      <ul>
+        <li>コントラストを意識する</li>
+        <li>暖色・寒色のバランスを取る</li>
+        <li>ブランドカラーを優先する</li>
+      </ul>
+    </section>
 
-      <section id="codes">
-        <h1>色コードまとめ</h1>
-        <p>
-          Web制作では、色コードを正確に扱うことが大切です。
-          主な形式は以下の通りです：
-        </p>
-        <ul>
-          <li>HEX: #RRGGBB</li>
-          <li>RGB: rgb(255,255,255)</li>
-          <li>HSL: hsl(0,0%,100%)</li>
-        </ul>
-      </section>
-    </div>
-  </div>
+    <section id="codes">
+      <h1>色コードまとめ</h1>
+      <p>
+        Web制作では、色コードを正確に扱うことが大切です。
+        主な形式は以下の通りです：
+      </p>
+      <ul>
+        <li>HEX: #RRGGBB</li>
+        <li>RGB: rgb(255,255,255)</li>
+        <li>HSL: hsl(0,0%,100%)</li>
+      </ul>
+    </section>
+  </main>
 
   <script>
     const btn = document.getElementById("darkModeBtn");
+    const body = document.body;
     btn.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-      btn.innerHTML = document.body.classList.contains("dark")
+      body.classList.toggle("dark");
+      btn.innerHTML = body.classList.contains("dark")
         ? '<i class="fas fa-sun"></i>'
         : '<i class="fas fa-moon"></i>';
     });
