@@ -1,180 +1,323 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3DS Hacks Guide</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Design Guide</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background: #fdfdfd;
-      color: #333;
-      transition: background 0.3s, color 0.3s;
+    :root {
+      --bg: #fdfdfd;
+      --fg: #333;
+      --card: #ffffff;
+      --line: #ddd;
+      --accent: #007bff;
+      --sidebar: #ccc;       /* グレー背景（ライト） */
+      --sidebar-fg: #333;
+      --overlay: rgba(0,0,0,.35);
     }
-
-    /* Night mode */
     body.dark {
-      background: #1a1a1a;
-      color: #eee;
+      --bg: #1a1a1a;
+      --fg: #eee;
+      --card: #2a2a2a;
+      --line: #444;
+      --accent: #4da3ff;
+      --sidebar: #333;       /* グレー系（ダーク） */
+      --sidebar-fg: #eee;
+      --overlay: rgba(0,0,0,.55);
     }
 
+    /* base */
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      transition: background .3s, color .3s;
+    }
+
+    /* header */
     header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 20px;
-      background: #fff;
-      border-bottom: 1px solid #ddd;
       position: sticky;
       top: 0;
       z-index: 1000;
-      transition: background 0.3s, border 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      padding: 0 16px;
+      background: var(--card);
+      border-bottom: 1px solid var(--line);
+      transition: background .3s, border-color .3s;
     }
-    body.dark header {
-      background: #2a2a2a;
-      border-color: #444;
-    }
-
     .site-title {
-      font-size: 20px;
       font-weight: 700;
+      font-size: 18px;
     }
-
     .header-actions {
       display: flex;
       align-items: center;
       gap: 14px;
     }
-
-    .header-actions a, .toggle-btn {
+    .header-actions a,
+    .icon-btn {
       color: inherit;
-      text-decoration: none;
       font-size: 20px;
+      text-decoration: none;
       background: transparent;
       border: none;
+      padding: 6px;
+      border-radius: 10px;
       cursor: pointer;
+      transition: color .2s, background .2s;
     }
-    .header-actions a:hover, .toggle-btn:hover {
-      color: #007bff;
-    }
-
-    main {
-      max-width: 900px;
-      margin: 30px auto;
-      padding: 0 20px;
-      line-height: 1.7;
+    .header-actions a:hover,
+    .icon-btn:hover {
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
     }
 
-    h1, h2 {
-      margin-top: 20px;
+    /* overlay for sidebar */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--overlay);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .25s, visibility .25s;
+      z-index: 999;
+    }
+    .overlay.show {
+      opacity: 1;
+      visibility: visible;
     }
 
-    /* 内部リンクのスタイル */
-    nav a {
+    /* slide-in sidebar */
+    .sidebar {
+      position: fixed;
+      top: 56px;             /* ヘッダーの下から */
+      left: 0;
+      width: 240px;
+      max-width: 85vw;
+      height: calc(100vh - 56px);
+      background: var(--sidebar);
+      color: var(--sidebar-fg);
+      transform: translateX(-100%);
+      transition: transform .28s ease;
+      z-index: 1001;
+      box-shadow: 0 8px 24px rgba(0,0,0,.15);
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      gap: 8px;
+    }
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    .sidebar h2 {
+      margin: 4px 0 8px;
+      font-size: 14px;
+      opacity: .85;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+    .nav-link {
       display: block;
-      margin: 5px 0;
       text-decoration: none;
-      color: #007bff;
+      color: inherit;
+      padding: 10px 12px;
+      border-radius: 10px;
+      transition: background .2s, color .2s, transform .06s;
+      font-size: 14px;
     }
-    nav a:hover {
-      text-decoration: underline;
+    .nav-link:hover {
+      background: rgba(0,0,0,.08);
+    }
+    body.dark .nav-link:hover {
+      background: rgba(255,255,255,.08);
+    }
+    .nav-link:active {
+      transform: translateY(1px);
+    }
+
+    /* main */
+    main {
+      max-width: 980px;
+      margin: 24px auto;
+      padding: 0 16px 48px;
+      line-height: 1.75;
+    }
+    section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px 16px;
+      margin-bottom: 18px;
+    }
+    h1 {
+      font-size: 22px;
+      margin: 0 0 10px;
+    }
+    h2 {
+      font-size: 16px;
+      margin: 18px 0 8px;
+    }
+    ul { padding-left: 20px; }
+
+    /* smooth scroll */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* small helpers */
+    .chip {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--card) 70%, var(--bg));
+      font-size: 12px;
+      opacity: .8;
+    }
+
+    /* responsive (optional,控えめ) */
+    @media (max-width: 520px) {
+      h1 { font-size: 20px; }
+      section { padding: 16px 14px; }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="site-title">3DS Hacks Guide</div>
+    <div class="site-title">Design Guide</div>
     <div class="header-actions">
-      <a href="https://github.com/Manipulative0" target="_blank"><i class="fab fa-github"></i></a>
-      <a href="https://x.com/manipulative00" target="_blank"><i class="fab fa-x-twitter"></i></a>
-      <button class="toggle-btn" id="darkModeBtn"><i class="fas fa-moon"></i></button>
+      <a href="https://github.com/Manipulative0" target="_blank" aria-label="GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+      <a href="https://x.com/manipulative00" target="_blank" aria-label="X">
+        <i class="fab fa-x-twitter"></i>
+      </a>
+      <!-- ナイトモード -->
+      <button class="icon-btn" id="darkModeBtn" aria-label="Dark Mode Toggle">
+        <i class="fas fa-moon"></i>
+      </button>
+      <!-- 三本線（ハンバーガー） -->
+      <button class="icon-btn" id="menuBtn" aria-label="Open Menu">
+        <i class="fas fa-bars"></i>
+      </button>
     </div>
   </header>
 
-  <main>
-    <nav>
-      <a href="#invert">色の反転</a>
-      <a href="#colorpicker">Color Picker</a>
-      <a href="#compatibility">色との相性</a>
-      <a href="#codes">色コードまとめ</a>
-    </nav>
+  <!-- スライドイン サイドバー -->
+  <aside class="sidebar" id="sidebar">
+    <h2>Site Navigation</h2>
+    <a class="nav-link" href="#invert">色の反転</a>
+    <a class="nav-link" href="#colorpicker">Color Picker</a>
+    <a class="nav-link" href="#compatibility">色との相性</a>
+    <a class="nav-link" href="#codes">色コードまとめ</a>
+    <div style="margin-top:12px;">
+      <span class="chip">Esc / 画面タップで閉じる</span>
+    </div>
+  </aside>
+  <div class="overlay" id="overlay"></div>
 
+  <main>
     <section id="invert">
       <h1>色の反転について</h1>
-      <p>
-        色の反転とは、現在表示されている色を反対の色に変える処理のことです。
-        デザインやWebサイト制作でよく使われ、特にダークモードや視認性向上に役立ちます。
-        例えば、白背景に黒文字の状態を反転すると、黒背景に白文字になります。
-      </p>
-      <h2>基本的な仕組み</h2>
-      <p>
-        色はRGB（赤・緑・青）の組み合わせで表されます。色の反転は、各RGB値を
-        <code>255 - 現在の値</code>で計算することで実現できます。
-        例えば、黒（rgb(0,0,0)）は白（rgb(255,255,255)）に、青（rgb(0,0,255)）は黄（rgb(255,255,0)）に変わります。
-      </p>
-      <h2>用途と効果</h2>
+      <p>色の反転は、画面上の色を反対色へ変換してコントラストや雰囲気を切り替える手法。特にダークモード切替の思想と相性が良く、明所/暗所の両環境で読みやすさを担保できる。</p>
+      <h2>仕組み</h2>
+      <p>RGBの各値を <code>255 - 値</code> にすることで実現（例：黒 <code>rgb(0,0,0)</code> → 白 <code>rgb(255,255,255)</code>）。CSSなら特定要素に <code>filter: invert(1);</code> で簡易反転が可能。</p>
+      <h2>使いどころ</h2>
       <ul>
-        <li>ダークモード切替による目の疲れ軽減</li>
-        <li>ユーザーの注目を引くためのアクセント表示</li>
-        <li>視覚的なコントラストを強めて可読性を向上</li>
-        <li>画像やグラフィックデザインの特殊効果として活用</li>
+        <li>ダークモードUI切替</li>
+        <li>画像・ロゴの一時的な視認性向上</li>
+        <li>アクセントとしての演出</li>
       </ul>
+      <h2>注意点</h2>
+      <p>全反転は配色破綻を起こしやすい。背景/文字だけ、画像だけ、などスコープを絞ると良い。</p>
     </section>
 
     <section id="colorpicker">
-      <h1>Color Pickerについて</h1>
-      <p>
-        Color Pickerは、色を選択・確認するためのツールです。Web制作やデザインにおいて、
-        正しい色を簡単に選ぶために不可欠です。
-      </p>
-      <h2>使い方</h2>
-      <p>多くのColor Pickerは、RGB・HEX・HSLなど複数形式で色を確認できます。</p>
-      <h2>効果</h2>
+      <h1>Color Picker</h1>
+      <p>色の選定を効率化するツール。HEX/RGB/HSLの変換、ブランドカラーのメモ、アクセシビリティのコントラスト確認などで使う。</p>
+      <h2>よく使う形式</h2>
       <ul>
-        <li>デザイン作業の効率化</li>
-        <li>配色ミスの防止</li>
-        <li>複数デバイス間での色の一貫性維持</li>
+        <li>HEX：<code>#RRGGBB</code></li>
+        <li>RGB：<code>rgb(255, 0, 0)</code></li>
+        <li>HSL：<code>hsl(0, 100%, 50%)</code></li>
       </ul>
+      <p class="chip">実装例は後で追加可能（リアルタイムで背景を変えるデモなど）</p>
     </section>
 
     <section id="compatibility">
-      <h1>色との相性</h1>
-      <p>
-        色の組み合わせによって、印象や可読性が大きく変わります。
-        相性の良い色を使うことで、デザイン全体の調和が生まれます。
-      </p>
-      <h2>ポイント</h2>
+      <h1>色との相性（配色）</h1>
+      <p>配色は「役割の設計」が命。主役（Primary）、強調（Accent）、背景（Surface/Background）を決め、比率を 6:3:1 程度で運用すると破綻しにくい。</p>
+      <h2>基本の考え方</h2>
       <ul>
-        <li>コントラストを意識する</li>
-        <li>暖色・寒色のバランスを取る</li>
-        <li>ブランドカラーを優先する</li>
+        <li>コントラスト比（WCAG）を意識：本文は最低 4.5:1 を目安に</li>
+        <li>補色/類似色/トライアドなどの配色理論を使い分ける</li>
+        <li>意味色（成功/警告/エラー）を統一する</li>
       </ul>
     </section>
 
     <section id="codes">
       <h1>色コードまとめ</h1>
-      <p>
-        Web制作では、色コードを正確に扱うことが大切です。
-        主な形式は以下の通りです：
-      </p>
       <ul>
-        <li>HEX: #RRGGBB</li>
-        <li>RGB: rgb(255,255,255)</li>
-        <li>HSL: hsl(0,0%,100%)</li>
+        <li>白：<code>#ffffff</code> / 黒：<code>#000000</code></li>
+        <li>グレー例：<code>#f5f5f5</code>, <code>#e0e0e0</code>, <code>#9e9e9e</code></li>
+        <li>ブルー例：<code>#007bff</code>, <code>#4da3ff</code></li>
       </ul>
+      <p>プロジェクト開始時に「色見本（デザイントークン）」を1枚にまとめておくと便利。</p>
     </section>
   </main>
 
   <script>
-    const btn = document.getElementById("darkModeBtn");
-    const body = document.body;
-    btn.addEventListener("click", () => {
-      body.classList.toggle("dark");
-      btn.innerHTML = body.classList.contains("dark")
-        ? '<i class="fas fa-sun"></i>'
-        : '<i class="fas fa-moon"></i>';
+    // --- ダークモード保持 ---
+    const htmlBody = document.body;
+    const darkBtn = document.getElementById('darkModeBtn');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      htmlBody.classList.add('dark');
+      darkBtn.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+
+    darkBtn.addEventListener('click', () => {
+      htmlBody.classList.toggle('dark');
+      const isDark = htmlBody.classList.contains('dark');
+      darkBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+
+    // --- ハンバーガーで左サイドバーをスライドイン ---
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    function openSidebar() {
+      sidebar.classList.add('open');
+      overlay.classList.add('show');
+      document.documentElement.style.overflow = 'hidden'; // 背景スクロール抑止
+    }
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('show');
+      document.documentElement.style.overflow = '';
+    }
+
+    menuBtn.addEventListener('click', openSidebar);
+    overlay.addEventListener('click', closeSidebar);
+    // Escで閉じる
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeSidebar();
+    });
+    // メニュー内のリンクを押したら閉じる
+    sidebar.querySelectorAll('a.nav-link').forEach(a => {
+      a.addEventListener('click', () => {
+        closeSidebar();
+      });
     });
   </script>
 </body>
